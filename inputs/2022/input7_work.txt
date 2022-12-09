@@ -1,0 +1,547 @@
+$ cd /
+dir bqm
+dir ctztn
+dir dbclg
+dir fhndmnt
+dir gczqbh
+dir lnsgbqp
+dir pblb
+dir pwfs
+dir vmvpf
+dir wjgh
+dir wjqsq
+$ cd bqm
+$ cd ..
+$ cd ctztn
+dir gpgbfzbs
+dir hfvqpt
+dir rgzfgz
+dir wmfvclz
+$ cd gpgbfzbs
+$ cd ..
+$ cd hfvqpt
+dir cggfgt
+dir jshtffs
+dir pnwcq
+dir str
+$ cd cggfgt
+dir glnrg
+dir mptpfvlh
+dir vmvpf
+$ cd glnrg
+$ cd ..
+$ cd mptpfvlh
+dir lsbjp
+$ cd lsbjp
+dir jqclpq
+dir whp
+$ cd jqclpq
+$ cd ..
+$ cd whp
+dir lgdlztb
+$ cd lgdlztb
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd vmvpf
+dir pfzd
+dir zrc
+$ cd pfzd
+dir ljtdcgt
+dir plltpvgv
+$ cd ljtdcgt
+$ cd ..
+$ cd plltpvgv
+$ cd ..
+$ cd ..
+$ cd zrc
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd jshtffs
+dir bwbwldd
+dir jctctjj
+dir jshtffs
+dir sngchq
+$ cd bwbwldd
+$ cd ..
+$ cd jctctjj
+dir flhrmt
+dir rgzfgz
+dir vmtnnfv
+$ cd flhrmt
+$ cd ..
+$ cd rgzfgz
+$ cd ..
+$ cd vmtnnfv
+dir rgzfgz
+$ cd rgzfgz
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd jshtffs
+$ cd ..
+$ cd sngchq
+dir bvcsvv
+dir hhd
+$ cd bvcsvv
+dir gbmccf
+$ cd gbmccf
+dir fttnqbwp
+$ cd fttnqbwp
+dir fhs
+$ cd fhs
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd hhd
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd pnwcq
+dir qtqqdd
+$ cd qtqqdd
+$ cd ..
+$ cd ..
+$ cd str
+dir vcdcgbtr
+dir zlsv
+$ cd vcdcgbtr
+$ cd ..
+$ cd zlsv
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd rgzfgz
+dir qwzfs
+$ cd qwzfs
+dir lzl
+$ cd lzl
+dir gpgccbc
+$ cd gpgccbc
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd wmfvclz
+dir zmft
+$ cd zmft
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd dbclg
+dir dgm
+dir rwdfw
+$ cd dgm
+dir fflb
+dir jshtffs
+$ cd fflb
+$ cd ..
+$ cd jshtffs
+dir mjb
+dir nwwcb
+dir rfjdh
+$ cd mjb
+dir rgzfgz
+$ cd rgzfgz
+$ cd ..
+$ cd ..
+$ cd nwwcb
+$ cd ..
+$ cd rfjdh
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd rwdfw
+dir hbsbctsr
+dir vvthg
+$ cd hbsbctsr
+dir shqdr
+$ cd shqdr
+$ cd ..
+$ cd ..
+$ cd vvthg
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd fhndmnt
+dir lstcq
+dir nvlncq
+dir rgzfgz
+dir ssqs
+dir vzpnjpsv
+$ cd lstcq
+$ cd ..
+$ cd nvlncq
+dir vmtnnfv
+$ cd vmtnnfv
+$ cd ..
+$ cd ..
+$ cd rgzfgz
+$ cd ..
+$ cd ssqs
+$ cd ..
+$ cd vzpnjpsv
+$ cd ..
+$ cd ..
+$ cd gczqbh
+dir nlhfgpr
+dir rgzfgz
+dir vmtnnfv
+$ cd nlhfgpr
+dir bwpd
+$ cd bwpd
+$ cd ..
+$ cd ..
+$ cd rgzfgz
+dir rgzfgz
+dir sdsqqq
+$ cd rgzfgz
+dir mprdrmmz
+$ cd mprdrmmz
+dir ncljgf
+$ cd ncljgf
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd sdsqqq
+$ cd ..
+$ cd ..
+$ cd vmtnnfv
+dir gbntbhrj
+dir nlhfgpr
+dir tnljzft
+$ cd gbntbhrj
+$ cd ..
+$ cd nlhfgpr
+dir cpglmt
+dir gcrntzb
+$ cd cpglmt
+$ cd ..
+$ cd gcrntzb
+$ cd ..
+$ cd ..
+$ cd tnljzft
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd lnsgbqp
+dir lqltnz
+dir vmtnnfv
+$ cd lqltnz
+dir vmtnnfv
+dir whvdf
+$ cd vmtnnfv
+$ cd ..
+$ cd whvdf
+dir nlhfgpr
+dir vmtnnfv
+$ cd nlhfgpr
+dir lrbrcz
+dir nvqzmflc
+$ cd lrbrcz
+$ cd ..
+$ cd nvqzmflc
+$ cd ..
+$ cd ..
+$ cd vmtnnfv
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd vmtnnfv
+dir clwrz
+dir rqbq
+dir wsrdwm
+$ cd clwrz
+$ cd ..
+$ cd rqbq
+$ cd ..
+$ cd wsrdwm
+dir nlhfgpr
+dir vhq
+dir vmvpf
+$ cd nlhfgpr
+dir ddlplnhp
+dir nbdj
+$ cd ddlplnhp
+dir czp
+dir dmchbv
+dir nlj
+dir wrqqln
+$ cd czp
+$ cd ..
+$ cd dmchbv
+$ cd ..
+$ cd nlj
+$ cd ..
+$ cd wrqqln
+dir bdprgbp
+$ cd bdprgbp
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd nbdj
+dir cdjd
+$ cd cdjd
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd vhq
+$ cd ..
+$ cd vmvpf
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd pblb
+dir jshtffs
+dir pwgtvhm
+$ cd jshtffs
+dir vtthv
+$ cd vtthv
+$ cd ..
+$ cd ..
+$ cd pwgtvhm
+$ cd ..
+$ cd ..
+$ cd pwfs
+dir dnnzr
+dir ncjzvsph
+dir nlhfgpr
+$ cd dnnzr
+$ cd ..
+$ cd ncjzvsph
+$ cd ..
+$ cd nlhfgpr
+$ cd ..
+$ cd ..
+$ cd vmvpf
+dir gwbt
+dir vmvpf
+dir vplm
+$ cd gwbt
+$ cd ..
+$ cd vmvpf
+$ cd ..
+$ cd vplm
+dir fbl
+dir rgzfgz
+$ cd fbl
+$ cd ..
+$ cd rgzfgz
+dir rgzfgz
+dir wgvw
+$ cd rgzfgz
+dir gmcqfqrn
+$ cd gmcqfqrn
+$ cd ..
+$ cd ..
+$ cd wgvw
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd wjgh
+dir ccgddrt
+dir cqh
+dir hwr
+dir jshtffs
+dir zbmjg
+$ cd ccgddrt
+dir vmvpf
+$ cd vmvpf
+dir ptwrssn
+$ cd ptwrssn
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd cqh
+dir blvcjl
+dir vmtnnfv
+$ cd blvcjl
+dir cgsznlm
+dir tgcqhcv
+dir vff
+dir vmtnnfv
+dir vmvpf
+dir zqmsn
+$ cd cgsznlm
+$ cd ..
+$ cd tgcqhcv
+dir hnrhdvff
+dir nhmqcm
+dir rvfsl
+dir smcrnh
+$ cd hnrhdvff
+dir rslbgns
+dir vmvpf
+$ cd rslbgns
+dir gzph
+$ cd gzph
+$ cd ..
+$ cd ..
+$ cd vmvpf
+$ cd ..
+$ cd ..
+$ cd nhmqcm
+$ cd ..
+$ cd rvfsl
+dir jshtffs
+dir rgzfgz
+$ cd jshtffs
+dir htb
+dir jshtffs
+dir vmvpf
+$ cd htb
+dir nvfv
+$ cd nvfv
+$ cd ..
+$ cd ..
+$ cd jshtffs
+$ cd ..
+$ cd vmvpf
+$ cd ..
+$ cd ..
+$ cd rgzfgz
+dir jjfdn
+dir nlhfgpr
+$ cd jjfdn
+$ cd ..
+$ cd nlhfgpr
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd smcrnh
+$ cd ..
+$ cd ..
+$ cd vff
+$ cd ..
+$ cd vmtnnfv
+dir rgzfgz
+dir zmr
+$ cd rgzfgz
+dir gjg
+dir sfrlhmm
+$ cd gjg
+dir dqjfz
+$ cd dqjfz
+dir zhtbsq
+$ cd zhtbsq
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd sfrlhmm
+$ cd ..
+$ cd ..
+$ cd zmr
+dir vmtnnfv
+$ cd vmtnnfv
+dir rgzfgz
+$ cd rgzfgz
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd vmvpf
+dir jshtffs
+dir vmtnnfv
+$ cd jshtffs
+dir jshtffs
+dir rtnwnqcb
+$ cd jshtffs
+$ cd ..
+$ cd rtnwnqcb
+$ cd ..
+$ cd ..
+$ cd vmtnnfv
+dir nlhfgpr
+$ cd nlhfgpr
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd zqmsn
+dir vflpgd
+$ cd vflpgd
+dir rgzfgz
+dir tmz
+$ cd rgzfgz
+dir lhmh
+dir pfwbz
+$ cd lhmh
+dir nlhfgpr
+$ cd nlhfgpr
+dir vnsdh
+$ cd vnsdh
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd pfwbz
+$ cd ..
+$ cd ..
+$ cd tmz
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd vmtnnfv
+dir llwmdf
+dir pvzdlsgp
+$ cd llwmdf
+$ cd ..
+$ cd pvzdlsgp
+dir drjbqvn
+dir grgc
+dir nlhfgpr
+$ cd drjbqvn
+$ cd ..
+$ cd grgc
+$ cd ..
+$ cd nlhfgpr
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd hwr
+dir jshtffs
+dir srrgj
+$ cd jshtffs
+dir zrm
+$ cd zrm
+$ cd ..
+$ cd ..
+$ cd srrgj
+$ cd ..
+$ cd ..
+$ cd jshtffs
+dir ngbb
+$ cd ngbb
+dir vmtnnfv
+$ cd vmtnnfv
+$ cd ..
+$ cd ..
+$ cd ..
+$ cd zbmjg
+$ cd ..
+$ cd ..
+$ cd wjqsq
+dir lnrzw
+dir ntrngh
+$ cd lnrzw
+dir crc
+dir ddhnvwqt
+dir gdhfqlln
+dir vmtnnfv
+$ cd crc
+$ cd ..
+$ cd ddhnvwqt
+$ cd ..
+$ cd gdhfqlln
+$ cd ..
+$ cd vmtnnfv
+$ cd ..
+$ cd ..
+$ cd ntrngh
+dir czt
+$ cd czt
