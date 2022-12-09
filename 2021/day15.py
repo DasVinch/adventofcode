@@ -20,8 +20,6 @@ SAMPLE = [
 
 MAX_INT = 2**31 - 1
 
-from queue import PriorityQueue
-
 class Day15:
 
     def __init__(self, lines) -> None:
