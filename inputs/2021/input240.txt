@@ -1,0 +1,23 @@
+## WIP zone for 24
+
+14 identical chunks.
+Counting z in base 26
+Former vars as lowercase at block entry, new as capital
+
+## A BLOCK
+x = z % 26 + [11, 14, 10, 14, -8, 14, -11, 10, -6, -9, 12, -5, -4, -9] C_1
+X = x neq input()
+Z = z // [1, 1, 1, 1, 26, 26, 1, 26, 1, 26, 26, 26, 26, 26] M
+ZZ = Z * (25 * X + 1)           i.e Z*1 OR Z*26.
+Y = (input() + C) * X for C in [7,8,16,8,3,12,1,8,8,14,4,14,15,6] C_2
+ZZZ += Y
+(z = ZZZ for next block)
+Question: ZZZ = 0 after 14 blocks???
+
+LSB (z) [0-25] + C_1
+    [C_1 - C1+25]
+if C_1 >= 10 ---> x can't eq. input (1-9) ergo X=1. No fork.
+
+if X is 1 we add a digit to Z
+
+
