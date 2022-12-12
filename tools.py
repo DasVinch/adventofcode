@@ -16,6 +16,11 @@ def make_int_matrix(lines: List[str]) -> np.ndarray:
 def make_cmapped_int_matrix(lines: List[str], cmap: Dict[str, int]) -> np.ndarray:
     return np.asarray([[cmap[c] for c in line] for line in lines])
 
+def make_char_matrix(lines: List[str]) -> np.ndarray:
+    return np.asarray([[c for c in line] for line in lines])
+
+def make_charint_matrix(lines: List[str]) -> np.ndarray:
+    return np.asarray([[ord(c) for c in line] for line in lines])
 
 
 from queue import PriorityQueue

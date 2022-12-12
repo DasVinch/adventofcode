@@ -103,14 +103,30 @@ class ALUInterpreter:
 
     def __str__(self):
         return '\n'.join([
-            f"stdin_p : {self.stdin_p}",
-            f"stdin   : {self.stdin}",
-            f"ip/lines: {self.ip} / {self.lenp}",
-            f"w       : {self.regs['w']}",
-            f"x       : {self.regs['x']}",
-            f"y       : {self.regs['y']}",
-            f"z       : {self.regs['z']}",
+            #f"stdin_p : {self.stdin_p}",
+            #f"stdin   : {self.stdin}",
+            #f"ip/lines: {self.ip} / {self.lenp}",
+            #f"w       : {self.regs['w']}",
+            #f"x       : {self.regs['x']}",
+            #f"y       : {self.regs['y']}",
+            f"z       : {self.regs['z']} | {base26s(self.regs['z'])}",
             ])
+
+
+def base26s(n: int):
+    if n == 0:
+        return 'Z'
+    
+    s = ''
+    while n > 0:
+        s = chr(((n % 26- 1)%26 + 65)) + s
+        n //= 26
+
+    return s
+
+
+
+
 
 SUBMONADS = []
 temp = []
@@ -127,6 +143,7 @@ if __name__ == "__main__":
     alu = ALUInterpreter([], MONAD)
     subalus = [ALUInterpreter([], SUBMONADS[ii]) for ii in range(14)]
 
+    '''
     states = {0} # w <- inp and x *= 0 don't actually matter. Fuck even y doesn't matter!
     newstates = set()
     for bitpos in range(10):
@@ -142,3 +159,36 @@ if __name__ == "__main__":
         states = newstates
         newstates = set()
         print(len(states))
+    '''
+              
+sb = alu
+mylist = [9 for _ in range(14)]
+# 0
+# 1 no impact at all
+mylist[2] = 2
+mylist[3] = 9
+mylist[4] = 9
+mylist[5] = 8
+mylist[6] = 9
+mylist[7] = 7
+mylist[8] = 9
+mylist[9] = 9
+mylist[10] = 9
+mylist[11] = 8
+mylist[12] = 3
+mylist[13] = 9
+
+for b0 in range(1,10):
+    for b1 in range(1,10):
+        mylist[0] = b0
+        mylist[13] = b1
+        sb.reset(mylist)
+        sb.override_regs(0,0,0,0)
+        sb.interpret()
+        if sb.regs['z'] == 0:
+            break
+        print(f"input @ {b0,b1}")
+        print(sb)
+        print('-------------------')
+
+
