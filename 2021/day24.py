@@ -17,6 +17,53 @@ BITSPROGRAM = [
 
 MONAD = get_input(24, 2021)
 
+# yapf: disable
+VALUES_C1DIVC2 = [
+    ( 11,   1,   7), #  0 Add digit, unavoidable      1
+        ( 14,   1,   8), #  1 Add digit, unavoidable      2
+            ( 10,   1,  16), #  2 Add digit, unavoidable      3
+
+                ( 14,   1,   8), #  3 Add digit, unavoidable      4
+                ( -8,  26,   3), #  4 Possible remove AND not add -> 3
+
+                ( 14,   1,  12), #  5 Add digit unavoid           -> 4
+                (-11,  26,   1), #  6 Drop poss no add            -> 3
+
+                ( 10,   1,   8), #  7 Add unavoid                 -> 4
+                ( -6,  26,   8), #  8 Drop poss no add            -> 3
+                
+            ( -9,  26,  14), #  9 Drop poss no add            -> 2
+
+            ( 12,  1,    4), # 10 Add unavoid                  -> 3
+            ( -5,  26,  14), # 11 Drop poss no add            -> 2
+        ( -4,  26,  15), # 12 Drop poss no add            -> 1
+    ( -9,  26,   6), # 13 Drop poss no add            -> 0
+]
+# yapf: enable
+
+
+def aMuchSimplerALUModule(z, stdin, c1, div, c2) -> int:
+    # c1 < 0 means we can make X 0 means we have a chance to NOT add a digit
+    # div = 26 means we have a chance to drop a digit
+    if c1 > 0:
+        X = 1
+    else:
+        # Only the LAST digit of Z matters in the determination of X
+        X = (z % 26 + c1) != stdin
+
+    Y = (stdin + c2) * X  # c2 > 0, nonzero iff X == 1
+
+    # if div == 26, z >> 1
+    # if X == 1, z << 1
+    # add y as new digit
+    Z = (z // div) * (25*X + 1) + Y
+
+    return Z
+
+
+
+
+        
 class ALUInterpreter:
     def __init__(self, stdin: List[int], program: List[str]) -> None:
         self.stdin_p = 0
