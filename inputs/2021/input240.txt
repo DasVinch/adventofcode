@@ -84,6 +84,4 @@ OK reasoning by pairs:
 
 9529 9897 9998 97
 xxxx xxxx xxxx xx
-
-
-9599 9897 9998 97
+3111 1121 3821 51
