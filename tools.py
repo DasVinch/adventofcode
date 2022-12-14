@@ -73,3 +73,54 @@ class AbstractDijkstraer:
 
     def solveWithPath(self):
         pass
+
+    def compare(self, l, r):
+        #print(l, r)
+        if isinstance(l, int) and isinstance(r, int):
+            if l < r:
+                return 1
+            elif l == r:
+                return 0
+            else:
+                return -1
+
+        elif isinstance(l, list) and isinstance(r, list):
+            if l == [] and r == []:
+                return 0
+            elif l == [] and len(r) > 0:
+                return 1
+            elif len(l) > 0 and r == []:
+                return -1
+            else:
+                x = self.compare(l[0], r[0])
+                if x != 0:
+                    return x
+                else:
+                    return self.compare(l[1:], r[1:])
+
+        elif isinstance(l, list):
+            return self.compare(l, [r])
+        else:
+            return self.compare([l], r)
+
+
+
+def mergesort(comparator, l):
+
+    def merge(comparator, l1, l2):
+        if len(l1) == 0:
+            return l2
+        elif len(l2) == 0:
+            return l1
+
+        if comparator(l1[0], l2[0]) == 1:
+            return [l1[0]] + merge(comparator, l1[1:], l2)
+        else:
+            return [l2[0]] + merge(comparator, l1, l2[1:])
+
+    if len(l) <= 1:
+        return l
+    else:
+        n = len(l) // 2
+        return merge(comparator, mergesort(comparator, l[:n]), mergesort(comparator, l[n:]))
+    
