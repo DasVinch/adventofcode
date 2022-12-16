@@ -22,10 +22,25 @@ SAMPLE = [
     '38,6,12',
 ]
 
+SAMPLE2 = [
+    'class: 0-1 or 4-19',
+    'row: 0-5 or 8-19',
+    'seat: 0-13 or 16-19',
+    '',
+    'your ticket:',
+    '11,12,13',
+    '',
+    'nearby tickets:',
+    '3,9,18',
+    '15,1,5',
+    '5,14,9',
+]
+
 REAL = get_input(DAYDAY, 2020)
 
 
 class Day:
+
     def __init__(self, lines) -> None:
         fields = True
         my_ticket = False
@@ -48,7 +63,7 @@ class Day:
                 s2 = split[1].split()[2]
                 a = s1.split('-')
                 b = s2.split('-')
-                self.fields += [(int(a[0]),int(a[1]), int(b[0]), int(b[1]))]
+                self.fields += [(int(a[0]), int(a[1]), int(b[0]), int(b[1]))]
             if my_ticket:
                 if l[:4] == 'your':
                     continue
@@ -62,6 +77,7 @@ class Day:
                     continue
                 self.tickets += [[int(t) for t in l.split(',')]]
 
+        self.fields = np.asarray(self.fields)
 
     def valuefvalid(self, k, n):
         f = self.fields[k]
@@ -85,7 +101,7 @@ class Day:
             for val in ticket:
                 if not self.valuevalid(val):
                     invalsum += val
-            
+
         return invalsum
 
     def solve2(self):
@@ -97,34 +113,57 @@ class Day:
                     invalsum += val
                     badticket[k] = True
                     break
-        
-        self.tickets = [t for (k,t) in enumerate(self.tickets) if not badticket[k]]
 
+        # Remove bad tickets
+        self.tickets = [
+            t for (k, t) in enumerate(self.tickets) if not badticket[k]
+        ]
+        self.tickets = np.asarray(self.tickets)
+        # Build compliance matrix
+        self.compl_tensor = (
+            ((self.tickets[:, None, :] >= self.fields[:, 0][None, :, None]) &
+             (self.tickets[:, None, :] <= self.fields[:, 1][None, :, None])) |
+            ((self.tickets[:, None, :] >= self.fields[:, 2][None, :, None]) &
+             (self.tickets[:, None, :] <= self.fields[:, 3][None, :, None])))
+        self.compl_matrix = np.all(self.compl_tensor, axis=0).astype(np.uint8)
 
-        # This is bullshit
+        hit = True
+        while hit:
+            hit = False
+            while np.any(np.sum(self.compl_matrix, axis=0) == 1):
+                hit = True
+                k = np.argmax(np.sum(self.compl_matrix, axis=0) == 1)
+                l = np.argmax(self.compl_matrix[:,k])
+                self.compl_matrix[l,:] = 0
+                self.compl_matrix[l,k] = 2
+            while np.any(np.sum(self.compl_matrix, axis=1) == 1):
+                hit = True
+                k = np.argmax(np.sum(self.compl_matrix, axis=1) == 1)
+                l = np.argmax(self.compl_matrix[k,:])
+                self.compl_matrix[:,l] = 0
+                self.compl_matrix[k,l] = 2
+            
+            
+            
 
-        n_fields = len(self.fields)
-        pending_fields = set(range(n_fields))
-        field_mapping = {}
-        while len(pending_fields) > 0:
-            field = pending_fields.pop()
-            for ticket_field in range(n_fields):
-                good = True
-                for t in self.tickets:
-                    if not self.valuefvalid(field, t[ticket_field]):
-                        good = False
-                        break
-                if good:
-                    field_mapping[field] = ticket_field
-                    print(f'Assign field {field} to ticketfield {ticket_field}')
-                    break
-            else:
-                pending_fields.add(field)
+        self.field_mapping = {k: np.argmax(self.compl_matrix[k,:]) for k in range(len(self.fnames))}
 
-        return 0
+        self.my_ticket_solved = {name: self.mine[self.field_mapping[kk]] for kk, name in enumerate(self.fnames)}
+        print(self.my_ticket_solved)
+
+        tot = 1
+        for fname in self.fnames:
+            if fname.startswith('departure'):
+                #print('a')
+                tot *= self.my_ticket_solved[fname]
+
+        return tot
+
 
 if __name__ == "__main__":
     t = Day(SAMPLE)
     print(t.solve2())
+    t2 = Day(SAMPLE2)
+    print(t2.solve2())
     r = Day(REAL)
-    print(r.solve1())
+    print(r.solve2())
