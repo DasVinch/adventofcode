@@ -10,8 +10,11 @@ def get_input(n: int, year:int = 2022) -> List[str]:
 
     return l
 
-def make_int_matrix(lines: List[str]) -> np.ndarray:
-    return np.asarray([[int(c) for c in line] for line in lines])
+def make_int_matrix(lines: List[str], splitchar:str=None) -> np.ndarray:
+    if splitchar is None:
+        return np.asarray([[int(c) for c in line] for line in lines])
+    else:
+        return np.asarray([[int(c) for c in line.split(splitchar)] for line in lines])
 
 def make_cmapped_int_matrix(lines: List[str], cmap: Dict[str, int]) -> np.ndarray:
     return np.asarray([[cmap[c] for c in line] for line in lines])
@@ -74,34 +77,34 @@ class AbstractDijkstraer:
     def solveWithPath(self):
         pass
 
-    def compare(self, l, r):
-        #print(l, r)
-        if isinstance(l, int) and isinstance(r, int):
-            if l < r:
-                return 1
-            elif l == r:
-                return 0
-            else:
-                return -1
-
-        elif isinstance(l, list) and isinstance(r, list):
-            if l == [] and r == []:
-                return 0
-            elif l == [] and len(r) > 0:
-                return 1
-            elif len(l) > 0 and r == []:
-                return -1
-            else:
-                x = self.compare(l[0], r[0])
-                if x != 0:
-                    return x
-                else:
-                    return self.compare(l[1:], r[1:])
-
-        elif isinstance(l, list):
-            return self.compare(l, [r])
+def compare(l, r):
+    #print(l, r)
+    if isinstance(l, int) and isinstance(r, int):
+        if l < r:
+            return 1
+        elif l == r:
+            return 0
         else:
-            return self.compare([l], r)
+            return -1
+
+    elif isinstance(l, list) and isinstance(r, list):
+        if l == [] and r == []:
+            return 0
+        elif l == [] and len(r) > 0:
+            return 1
+        elif len(l) > 0 and r == []:
+            return -1
+        else:
+            x = compare(l[0], r[0])
+            if x != 0:
+                return x
+            else:
+                return compare(l[1:], r[1:])
+
+    elif isinstance(l, list):
+        return compare(l, [r])
+    else:
+        return compare([l], r)
 
 
 
