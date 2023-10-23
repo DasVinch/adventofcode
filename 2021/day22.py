@@ -1,4 +1,7 @@
 # Let's solve the first star bruteforce.
+from __future__ import annotations
+
+import typing as typ
 
 from tools import get_input, mergesort
 import numpy as np
@@ -8,6 +11,11 @@ BASIC = [
     'on x=11..13,y=11..13,z=11..13',
     'off x=9..11,y=9..11,z=9..11',
     'on x=10..10,y=10..10,z=10..10',
+]
+
+TESTSPLIT = [
+    'on x=-2..2,y=-2..2,z=-2..2',
+    'off x=-1..1,y=-1..1,z=-1..1',
 ]
 
 SAMPLE = [
@@ -103,8 +111,8 @@ REAL = get_input(22, 2021)
 
 class Day22:
 
-    def __init__(self, lines, shortonly: bool = True):
-        self.onoff = []
+    def __init__(self, lines: typ.List[str], shortonly: bool = True) -> None:
+        self.onoff: typ.List[bool] = []
         self.slices = []
 
         for line in lines:
@@ -122,8 +130,8 @@ class Day22:
                       xyz[2][0] + 50:xyz[2][1] + 51]
             ]
 
-    def solve1(self):
-        self.cubezone = np.zeros((101, 101, 101), np.bool)
+    def solve1(self) -> int:
+        self.cubezone = np.zeros((101, 101, 101), bool)
         for k in range(len(self.onoff)):
             self.cubezone[self.slices[k]] = self.onoff[k]
         return np.sum(self.cubezone)
@@ -131,7 +139,14 @@ class Day22:
 
 class Cuboid:
 
-    def __init__(self, a, b, c, d, e, f, status=False) -> None:
+    def __init__(self,
+                 a: int,
+                 b: int,
+                 c: int,
+                 d: int,
+                 e: int,
+                 f: int,
+                 status: bool = False) -> None:
         self.xmin = a
         self.xmax = b
         self.ymin = c
@@ -143,83 +158,161 @@ class Cuboid:
 
         self._volume()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.xmin}..{self.xmax}, {self.ymin}..{self.ymax}, {self.zmin}..{self.zmax}, {self.status} {self.volume}"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+    def __hash__(self) -> int:
+        return f"{self.xmin}..{self.xmax}, {self.ymin}..{self.ymax}, {self.zmin}..{self.zmax}".__hash__()
 
-    def _volume(self):
+    def _volume(self) -> None:
         self.volume = ((self.xmax - self.xmin + 1) *
                        (self.ymax - self.ymin + 1) *
                        (self.zmax - self.zmin + 1))
 
-    def slice_x(self, x, inc_lower : bool = True):
+    def slice_x(self, x: int, inc_lower: bool = True) -> typ.FrozenSet[Cuboid]:
         if not inc_lower:
-            return self.slice_x(x-1, inc_lower = True)
+            return self.slice_x(x - 1, inc_lower=True)
         if x >= self.xmin and x < self.xmax:
-            return [Cuboid(self.xmin, x,   self.ymin, self.ymax, self.zmin, self.zmax, status=self.status),
-                    Cuboid(x+1, self.xmax, self.ymin, self.ymax, self.zmin, self.zmax, status=self.status)]
+            return frozenset({
+                Cuboid(self.xmin,
+                       x,
+                       self.ymin,
+                       self.ymax,
+                       self.zmin,
+                       self.zmax,
+                       status=self.status),
+                Cuboid(x + 1,
+                       self.xmax,
+                       self.ymin,
+                       self.ymax,
+                       self.zmin,
+                       self.zmax,
+                       status=self.status)
+            })
         else:
-            return [self]
+            return frozenset({self})
 
-    def slice_y(self, y, inc_lower : bool = True):
+    def slice_y(self, y: int, inc_lower: bool = True) -> typ.FrozenSet[Cuboid]:
         if not inc_lower:
-            return self.slice_y(y-1, inc_lower = True)
+            return self.slice_y(y - 1, inc_lower=True)
         if y >= self.ymin and y < self.ymax:
-            return [Cuboid(self.xmin, self.xmax, self.ymin, y, self.zmin, self.zmax, status=self.status),
-                    Cuboid(self.xmin, self.xmax, y+1, self.ymax, self.zmin, self.zmax, status=self.status)]
+            return frozenset({
+                Cuboid(self.xmin,
+                       self.xmax,
+                       self.ymin,
+                       y,
+                       self.zmin,
+                       self.zmax,
+                       status=self.status),
+                Cuboid(self.xmin,
+                       self.xmax,
+                       y + 1,
+                       self.ymax,
+                       self.zmin,
+                       self.zmax,
+                       status=self.status)
+            })
         else:
-            return [self]
-    
-    def slice_z(self, z, inc_lower : bool = True):
+            return frozenset({self})
+
+    def slice_z(self, z: int, inc_lower: bool = True) -> typ.FrozenSet[Cuboid]:
         if not inc_lower:
-            return self.slice_z(z-1, inc_lower = True)
+            return self.slice_z(z - 1, inc_lower=True)
         if z >= self.zmin and z < self.zmax:
-            return [Cuboid(self.xmin, self.xmax, self.ymin, self.ymax, self.zmin, z, status=self.status),
-                    Cuboid(self.xmin, self.xmax, self.ymin, self.ymax, z+1, self.zmax, status=self.status)]
+            return frozenset({
+                Cuboid(self.xmin,
+                       self.xmax,
+                       self.ymin,
+                       self.ymax,
+                       self.zmin,
+                       z,
+                       status=self.status),
+                Cuboid(self.xmin,
+                       self.xmax,
+                       self.ymin,
+                       self.ymax,
+                       z + 1,
+                       self.zmax,
+                       status=self.status)
+            })
         else:
-            return [self]
+            return frozenset({self})
 
+    def contains(self, other: Cuboid) -> bool:
+        return (self.xmin <= other.xmin and self.xmax >= other.xmax
+                and self.ymin <= other.ymin and self.ymax >= other.ymax
+                and self.zmin <= other.zmin and self.zmax >= other.zmax)
 
-    def contains(self, other):
-        return (self.xmin <= other.xmin and self.xmax >= other.xmax and
-                self.ymin <= other.ymin and self.ymax >= other.ymax and
-                self.zmin <= other.zmin and self.zmax >= other.zmax)
+    
+    
+    def slice_x_if_need(self, other: Cuboid, minmax: bool = False) -> typ.FrozenSet[Cuboid]:
+        if self.intersect_yz(other):
+            if not minmax:
+                return self.slice_x(other.xmin, False)
+            else:
+                return self.slice_x(other.xmax, True)
+        else:
+            return frozenset({self})
+        
+    def slice_y_if_need(self, other: Cuboid, minmax: bool = False) -> typ.FrozenSet[Cuboid]:
+        if self.intersect_xz(other):
+            if not minmax:
+                return self.slice_y(other.ymin, False)
+            else:
+                return self.slice_y(other.ymax, True)
+        else:
+            return frozenset({self})
+        
+    def slice_z_if_need(self, other: Cuboid, minmax: bool = False) -> typ.FrozenSet[Cuboid]:
+        if self.intersect_xy(other):
+            if not minmax:
+                return self.slice_z(other.zmin, False)
+            else:
+                return self.slice_z(other.zmax, True)
+        else:
+            return frozenset({self})
 
-    def compare(self, other):
-        if self.xmin < other.xmin:
-            return -1
-        elif self.xmin > other.xmin:
-            return 1
-        if self.xmax < other.xmax:
-            return -1
-        elif self.xmax > other.xmax:
-            return 1
+    def intersect_xy(self, other: Cuboid) -> bool:
+        return (self.xmax >= other.xmin and other.xmax >= self.xmin and
+                self.ymax >= other.ymin and other.ymax >= self.ymin)
+    
+    def intersect_xz(self, other: Cuboid) -> bool:
+        return (self.xmax >= other.xmin and other.xmax >= self.xmin and
+                self.zmax >= other.zmin and other.zmax >= self.zmin)
+    
+    def intersect_yz(self, other: Cuboid) -> bool:
+        return (self.ymax >= other.ymin and other.ymax >= self.ymin and
+                self.zmax >= other.zmin and other.zmax >= self.zmin)
 
-        if self.ymin < other.ymin:
-            return -1
-        elif self.ymin > other.ymin:
-            return 1
-        if self.ymax < other.ymax:
-            return -1
-        elif self.ymax > other.ymax:
-            return 1
+    
+    def split_other_and_discard_pieces(self, other: Cuboid) -> typ.FrozenSet[Cuboid]:
+        if self.contains(other):
+            return frozenset()
+        
+        splits = other.slice_x_if_need(self, False)
+        splits = set().union(*{s.slice_x_if_need(self, True) for s in splits})
 
-        if self.zmin < other.zmin:
-            return -1
-        elif self.zmin > other.zmin:
-            return 1
-        if self.zmax < other.zmax:
-            return -1
-        elif self.zmax > other.zmax:
-            return 1
+        splits = set().union(*{s.slice_y_if_need(self, False) for s in splits})
+        splits = set().union(*{s.slice_y_if_need(self, True) for s in splits})
 
-        return 0
+        splits = set().union(*{s.slice_z_if_need(self, False) for s in splits})
+        splits = set().union(*{s.slice_z_if_need(self, True) for s in splits})
+        splits = {s for s in splits if not self.contains(s)}
+
+        return frozenset(splits)
+    
+
+CubeDescr: typ.TypeAlias = typ.Tuple[int, int, int, int, int, int]
+
 
 class Day22_2:
 
-    def __init__(self, lines, shortonly: bool = False) -> None:
-        self.onoff = []
-        self.slices = []
-        self.values = []
+    def __init__(self, lines: typ.List[str], shortonly: bool = False) -> None:
+        self.onoff: typ.List[bool] = []
+        self.values: typ.List[CubeDescr] = []
 
         for line in lines:
             onoff = line.split()[0] == 'on'
@@ -230,57 +323,37 @@ class Day22_2:
             if shortonly and np.any(np.abs(np.asarray(xyz)) > 50):
                 break
             self.onoff += [onoff]
-            self.values += [
-                [xyz[0][0], xyz[0][1],
-                 xyz[1][0], xyz[1][1],
-                 xyz[2][0], xyz[2][1]]
-            ]
+            self.values += [(xyz[0][0], xyz[0][1], xyz[1][0], xyz[1][1],
+                             xyz[2][0], xyz[2][1])]
 
-    def solve(self, kmin=0, kmax= None):
-        self.cubids = set()
+    def solve(self, kmin: int = 0, kmax: typ.Optional[int] = None) -> int:
+        self.cubids: typ.Set[Cuboid] = set()
         if kmax is None:
             kmax = len(self.values)
-
 
         for k in range(kmin, kmax):
             if k == len(self.values):
                 break
 
-            print('k', k, len(self.cubids))
 
             new_cube = Cuboid(*self.values[k], status=self.onoff[k])
-            self.split_cubes = set()
-            subsplitcubes = []
-            for cubid in self.cubids: # We're gonna need an optimization to avoid going through ALL of these
-                if new_cube.contains(cubid):
-                    continue
+            
+            cubids_next = {new_cube}
+            for cubid in self.cubids:
+                cubids_next.update(new_cube.split_other_and_discard_pieces(cubid))
+            self.cubids = {c for c in cubids_next if c.status}
 
-                a = cubid.slice_x(new_cube.xmin, False)
-                b = sum([cub.slice_x(new_cube.xmax, True) for cub in a], [])
-                c = sum([cub.slice_y(new_cube.ymin, False) for cub in b], [])
-                d = sum([cub.slice_y(new_cube.ymax, True) for cub in c], [])
-                e = sum([cub.slice_z(new_cube.zmin, False) for cub in d], [])
-                f = sum([cub.slice_z(new_cube.zmax, True) for cub in e], [])
-
-                subsplitcubes = f
-                #print(f"Split into {len(a)} {len(b)} {len(c)} {len(d)} {len(e)} {len(f)} - total {len(subsplitcubes)}")
-
-                for subcubid in subsplitcubes:
-                    if not new_cube.contains(subcubid):
-                        self.split_cubes.add(subcubid)
-
-            self.cubids = self.split_cubes
-            self.cubids.add(new_cube)
-
-            self.cubids = {c for c in self.cubids if c.status}
-            #self.listedcubes = {(c.xmin, c.xmax, c.ymin, c.ymax, c.zmin, c.zmax) for c in self.cubids}
-            #print(len(self.cubids),len(self.listedcubes))
+            print('k', k, len(self.cubids))
 
         return sum([c.volume for c in self.cubids if c.status])
+
 
 if __name__ == "__main__":
     #t1 = Day22(SAMPLE2)
     #print(t1.solve1())
     t = Day22_2(REAL)
-    print(t.solve())
+    import time
+    s = time.time()
+    print(t.solve(0, 20))
+    print(time.time() - s)
     #print(t.solve())
