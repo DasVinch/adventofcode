@@ -25,6 +25,13 @@ def make_char_matrix(lines: List[str]) -> np.ndarray:
 def make_charint_matrix(lines: List[str]) -> np.ndarray:
     return np.asarray([[ord(c) for c in line] for line in lines])
 
+def print_bool_matrix(arr: np.ndarray) -> None:
+    for row in arr:
+        for v in row:
+            print('▉' if v else ' ', end='')
+        print()
+
+
 
 from queue import PriorityQueue
 from dataclasses import dataclass, field
@@ -59,7 +66,6 @@ class AbstractDijkstraer:
             wrappedelem = self.border.get()
             prio = wrappedelem.priority
             elem = wrappedelem.item
-
 
             if elem in self.targets:
                 return prio
