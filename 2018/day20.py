@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import typing as typ
+
 from tools import get_input
 
 SAMPLES = [
@@ -8,7 +12,70 @@ SAMPLES = [
     '^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$', # 31
 ]
 
-REAL = get_input(200, 2018)[0]
+REAL = get_input(20, 2018)[0]
+
+
+Node: typ.TypeAlias = typ.Tuple[int, int]
+Graph: typ.TypeAlias = typ.Dict[Node, typ.Set[Node]]
+
+# Basically, one first DFS path to construct the graph
+# Then a second pass to resolve it.
+
+def graphiphy(g: Graph, current_node: Node, regex: Regex) -> set[Node]:
+    node = graphiphy_simple(g, current_node, regex.base)
+
+    if len(regex.subexps) == 0:
+        return {node}
+
+    sub_endnodes: set[Node] = set()
+    for subregex in regex.subexps:
+        sub_endnodes.update(graphiphy(g, node, subregex))
+
+    if regex.nextregex is None:
+        return sub_endnodes
+    
+    final_endnodes: set[Node] = set()
+    for end_node in sub_endnodes:
+        final_endnodes.update(graphiphy(g, end_node, regex.nextregex))
+
+    return final_endnodes
+
+def graphiphy_simple(g: Graph, current_node: Node, simple_nesw: str) -> Node:
+    cnode = current_node
+    for c in simple_nesw:
+        if c == 'N':
+            ccnode = (cnode[0], cnode[1] + 1)
+        elif c == 'E':
+            ccnode = (cnode[0] + 1, cnode[1])
+        elif c == 'S':
+            ccnode = (cnode[0], cnode[1] - 1)
+        elif c == 'W':
+            ccnode = (cnode[0] - 1, cnode[1])
+        else:
+            raise AssertionError('Wut.')
+        
+        if not cnode in g:
+            g[cnode] = set()
+        if not ccnode in g:
+            g[ccnode] = set()
+
+        g[cnode].add(ccnode)
+        g[ccnode].add(cnode)
+
+        cnode = ccnode
+
+    return cnode
+
+
+from tools import AbstractDijkstraer
+
+class ConcreteDijkstraer(AbstractDijkstraer):
+    def __init__(self, graph: Graph, start, targets) -> None:
+        super().__init__(start, targets)
+        self.graph = graph
+
+    def get_neighbors(self, elem: Node) -> typ.Iterable[tuple[Node, int]]:
+        return {(el, 1) for el in self.graph[elem]} # DONT FORGET TO RETURN A COST
 
 
 class Regex:
@@ -16,13 +83,13 @@ class Regex:
     NODES = 0
 
     def __init__(self) -> None:
-        self.base = ''
-        self.subexps = []
-        self.nextregex = None
-        self.thisnode = Regex.NODES
+        self.base: str = ''
+        self.subexps: list[Regex] = []
+        self.nextregex: Regex | None = None
+        self.thisnode: int = Regex.NODES
         Regex.NODES += 1
 
-    def __str__(self):
+    def __str__(self) -> str:
         s =  f'[{self.thisnode}]'
         s += f'{self.base}'
         if len(self.subexps) > 0:
@@ -36,7 +103,7 @@ class Regex:
             s += self.nextregex.__str__()
         return s
 
-    def process(self, regex):
+    def process(self, regex: str) -> str:
         #print(regex, '-------', self)
         k = 0
         while k < len(regex) and regex[k] in 'NWSE':
@@ -55,6 +122,7 @@ class Regex:
                 self.subexps += [Regex()]
                 r = self.subexps[-1].process(r[1:])
                 c = r[0]
+            assert r[0] == ')'
             r = r[1:] # pop the ')'
 
         if len(r) > 0:
@@ -62,13 +130,12 @@ class Regex:
                 return r
             else:
                 self.nextregex = Regex()
-                rr = self.nextregex.process(r)
-                return rr
+                return self.nextregex.process(r)
 
         else:
             return ''
 
-    def countminimax(self):
+    def countminimax(self) -> int:
         tot = len(self.base)
         if len(self.subexps):
             sublens = [sub.countminimax() for sub in self.subexps]
@@ -79,7 +146,7 @@ class Regex:
 
         return tot
 
-    def countbydistance(self):
+    def countbydistance(self) -> dict[int, int]:
         distcount = {}
         for c in range(len(self.base)):
             distcount[c+1] = 1
@@ -118,14 +185,31 @@ if __name__ == "__main__":
         t = Regex()
         t.process(SAMPLES[k][1:-1])
         print(t)
-        print(t.countminimax())
-        print(t.countbydistance())
+        #print(t.countminimax())
+        #print(t.countbydistance())
+        gt = {}
+        graphiphy(gt, (0,0), t)
+
+        djk = ConcreteDijkstraer(gt, (0,0), set())
+        djk.solveWithoutPath()
+        print(max(djk.distanceDict.values()))
+
+
 
     r = Regex()
     r.process(REAL[1:-1])
-    print(r.countminimax())
-    D = r.countbydistance()
-    print(sum([D[k] for k in D if k >= 1000]))
 
-    # 9448 too high
-    # 9000 too high
+    gr = {}
+    graphiphy(gr, (0,0), r)
+
+    djk = ConcreteDijkstraer(gr, (0,0), set())
+    djk.solveWithoutPath()
+    print(max(djk.distanceDict.values()))
+    # Part 2
+    print(len([k for k in djk.distanceDict.values() if k >= 1000]))
+
+
+# GRAPHIPHY A REGEX
+# graphiphy the mainline
+# graphiphy all of the parenthesized branches AND RETURN ALL THE TAIL NODES.
+# process the tail FROM EACH OF THE SET OF THE TAIL NODES.
