@@ -67,7 +67,9 @@ class AbstractDijkstraer:
             prio = wrappedelem.priority
             elem = wrappedelem.item
 
-            if elem in self.targets:
+            #print(elem)
+
+            if self.validate_target(elem):
                 return prio
 
             for nei, cost in self.get_neighbors(elem):
@@ -76,6 +78,9 @@ class AbstractDijkstraer:
                 if is_new or score < self.distanceDict[nei]:
                     self.distanceDict[nei] = score
                     self.border.put(PrioritizedItem(priority=score, item=nei))
+
+    def validate_target(self, elem) -> bool:
+        return elem in self.targets
 
     def get_neighbors(self, elem):
         raise NotImplementedError('Abstract.')
