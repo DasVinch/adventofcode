@@ -18,9 +18,9 @@ TESTKEYS = [
 REALKEY = 'pxxbnzuo'
 
 
-class ConcreteDijkstraer(AbstractDijkstraer):
+class NodeDijkstraer(AbstractDijkstraer[Node]):
 
-    def __init__(self, key: str, start, targets) -> None:
+    def __init__(self, key: str, start: Node, targets: typ.Set[Node]) -> None:
         self.key = key
         super().__init__(start, targets)
 
@@ -54,7 +54,7 @@ class ConcreteDijkstraer(AbstractDijkstraer):
 if __name__ == '__main__':
     # Part 1
     for testkey in TESTKEYS + [REALKEY]:
-        djk = ConcreteDijkstraer(testkey, ('', 0), [('', 3-3j)])
+        djk = NodeDijkstraer(testkey, ('', 0), {('', 3-3j)})
         djk.solveWithoutPath()
         f = [t for t in djk.distanceDict if t[1] == 3-3j]
         if len(f) > 0:
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     # Part 2 - run dijkstra to exhaustion with no target
     for testkey in TESTKEYS + [REALKEY]:
-        djk = ConcreteDijkstraer(testkey, ('', 0), [])
+        djk = NodeDijkstraer(testkey, ('', 0), set())
         djk.solveWithoutPath()
         f = [t for t in djk.distanceDict if t[1] == 3-3j]
         if len(f) > 0:

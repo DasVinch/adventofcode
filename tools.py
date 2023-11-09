@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import typing as typ
+
 from typing import List, Dict
 import numpy as np
 
@@ -37,27 +41,29 @@ from queue import PriorityQueue
 from dataclasses import dataclass, field
 from typing import Any
 
+T = typ.TypeVar('T')
 @dataclass(order=True)
-class PrioritizedItem:
+class PrioritizedItem(typ.Generic[T]):
     priority: int
-    item: Any=field(compare=False)
+    item: T = field(compare=False)
 
-class AbstractDijkstraer:
-    def __init__(self, start, targets) -> None:
-        self.border = PriorityQueue()
-        self.border.put(PrioritizedItem(priority=0, item=start))
+
+class AbstractDijkstraer(typ.Generic[T]):
+    def __init__(self, start: T, targets: typ.Set[T]) -> None:
 
         self.targets = targets
 
-        self.distanceDict = {start: 0}
+        self.border: PriorityQueue[PrioritizedItem[T]] = PriorityQueue()
+        self.border.put(PrioritizedItem(priority=0, item=start))
 
+        self.distanceDict = {start: 0}
         self.used = False
 
         # There must be no zero-score transitions!!
         # Otherwise we can hack it by making transitioning *into* the
         # final target cost 1 more, to sort the queue safely for equal values.
 
-    def solveWithoutPath(self):
+    def solveWithoutPath(self) -> int | None:
         if self.used:
             raise ValueError('AbstractDijkstraer has been used. Make a new one')
         self.used = True
@@ -79,14 +85,11 @@ class AbstractDijkstraer:
                     self.distanceDict[nei] = score
                     self.border.put(PrioritizedItem(priority=score, item=nei))
 
-    def validate_target(self, elem) -> bool:
+    def validate_target(self, elem: T) -> bool:
         return elem in self.targets
 
-    def get_neighbors(self, elem):
+    def get_neighbors(self, elem: T) -> typ.Set[typ.Tuple[T, int]]:
         raise NotImplementedError('Abstract.')
-
-    def solveWithPath(self):
-        pass
 
 def compare(l, r):
     #print(l, r)
