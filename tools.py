@@ -14,7 +14,7 @@ def get_input(n: int, year:int = 2022) -> List[str]:
 
     return l
 
-def make_int_matrix(lines: List[str], splitchar:str=None) -> np.ndarray:
+def make_int_matrix(lines: List[str], splitchar:str|None = None) -> np.ndarray:
     if splitchar is None:
         return np.asarray([[int(c) for c in line] for line in lines])
     else:

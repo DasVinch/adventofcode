@@ -15,7 +15,7 @@ SAMPLE = [
 REAL = get_input(12, 2016)
 
 
-class Day12:
+class Interpreter:
     def __init__(self, lines: typ.List[str], part2: bool = False) -> None:
         self.lines = lines
 
@@ -57,12 +57,12 @@ class Day12:
     
 
 if __name__ == "__main__":
-    t = Day12(SAMPLE)
+    t = Interpreter(SAMPLE)
     print(t.solve1())
-    r = Day12(REAL)
+    r = Interpreter(REAL)
     print(r.solve1())
 
-    t = Day12(SAMPLE, part2=True)
+    t = Interpreter(SAMPLE, part2=True)
     print(t.solve1())
-    r = Day12(REAL, part2=True)
+    r = Interpreter(REAL, part2=True)
     print(r.solve1())
