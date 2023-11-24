@@ -26,6 +26,26 @@ class Node:
 def viable(a: Node, b: Node) -> bool:
     return a.used > 0 and a != b and a.used <= b.avail
 
+class NodeGrid:
+    def __init__(self, all_nodes: list[Node]) -> None:
+        self.maxx = max(*(n.x for n in all_nodes)) + 1
+        self.maxy = max(*(n.y for n in all_nodes)) + 1
+        nodes = all_nodes.copy()
+        nodes.sort(key = lambda n: (n.x, n.y), reverse=True)
+        
+        self.grid: list[list[Node]] = [[nodes.pop() for _ in range(self.maxy)] for _ in range(self.maxx)]
+
+    def __str__(self) -> str:
+        s: list[str] = []
+        for subg in self.grid:
+            ss = ''
+            for node in subg:
+                s += f' {node.used:3d}/{node.size:3d}'
+            s += [ss + '\n']
+        return ''.join(s)
+
+
+
 
 if __name__ == '__main__':
     all_nodes = [Node.from_line(line) for line in df_h]
@@ -37,3 +57,7 @@ if __name__ == '__main__':
                 viable_pairs += 1
 
     print(viable_pairs)
+
+    ng = NodeGrid(all_nodes)
+
+
