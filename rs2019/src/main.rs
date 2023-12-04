@@ -1,6 +1,6 @@
-mod day2;
+mod day3;
 mod loadfile;
 
 fn main() {
-    day2::day2_entry();
+    day3::entry();
 }
