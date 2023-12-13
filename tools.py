@@ -4,6 +4,7 @@ import typing as typ
 
 from typing import List, Dict
 import numpy as np
+import numpy.typing as npt
 
 def get_input(n: int, year:int = 2022) -> List[str]:
     fname = f"inputs/{year}/input{n}.txt"
@@ -14,26 +15,37 @@ def get_input(n: int, year:int = 2022) -> List[str]:
 
     return l
 
-def make_int_matrix(lines: List[str], splitchar:str|None = None) -> np.ndarray:
+def make_int_matrix(lines: List[str], splitchar:str|None = None) -> npt.NDArray:
     if splitchar is None:
         return np.asarray([[int(c) for c in line] for line in lines])
     else:
         return np.asarray([[int(c) for c in line.split(splitchar)] for line in lines])
 
-def make_cmapped_int_matrix(lines: List[str], cmap: Dict[str, int]) -> np.ndarray:
+def make_cmapped_int_matrix(lines: List[str], cmap: Dict[str, int]) -> npt.NDArray:
     return np.asarray([[cmap[c] for c in line] for line in lines])
 
-def make_char_matrix(lines: List[str]) -> np.ndarray:
+def make_char_matrix(lines: List[str]) -> npt.NDArray:
     return np.asarray([[c for c in line] for line in lines])
 
-def make_charint_matrix(lines: List[str]) -> np.ndarray:
+def make_charint_matrix(lines: List[str]) -> npt.NDArray:
     return np.asarray([[ord(c) for c in line] for line in lines])
 
-def print_bool_matrix(arr: np.ndarray) -> None:
-    for row in arr:
-        for v in row:
-            print('▉' if v else ' ', end='')
+def print_bool_matrix(arr: npt.NDArray) -> None:
+    for row1, row2 in zip(arr[::2], arr[1::2]):
+        for v1, v2 in zip(row1, row2):
+            print(
+                {
+                    (True, True): '▉',
+                    (True, False): '▀',
+                    (False, True): '▄',
+                    (False, False): ' ',
+                }[(v1, v2)], end='')
         print()
+    if len(arr) % 2 == 1:
+        for v in arr[-1]:
+            print('▀' if v else ' ', end = '')
+
+    print()
 
 
 
