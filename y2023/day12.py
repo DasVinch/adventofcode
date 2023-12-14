@@ -181,7 +181,7 @@ class LineFillRepresenter:  # LPR
         while True:
             if position_complies(self.rpz, self.known):
                 self.poss_positions_counter += 1
-                print(self.poss_positions_counter)
+                #print(self.poss_positions_counter)
                 if not self.enumerate_only:
                     self.poss_positions += [self.rpz.copy()]
             if not self.next_position():
