@@ -1,6 +1,8 @@
 import os
 from tools import get_input
 
+from tqdm import trange
+
 DAYDAY = int(os.path.basename(__file__).split('.')[0][3:])
 
 # if hacking with another file-based example
@@ -110,40 +112,60 @@ class Day:
                 dbg("Push >")
                 return tuple([r >> 1 for r in rock])
 
-    def __str__(self):
-        return '\n'.join([bin(x)[2:].replace('0','.') for x in self.stack[::-1]])
+    def __str__(self, n = None):
+        if n is None:
+            return '\n'.join([bin(x)[2:].replace('0','.') for x in self.stack[::-1]])
+        else:
+            return '\n'.join([bin(x)[2:].replace('0','.') for x in self.stack[:-n:-1]])
 
 
     def solve1(self):
-        from tqdm import trange
         for i in trange(2022):
             self.push_stone(i % 5)
         return self.true_height - 1
 
     def solve2(self):
-
-
-
-        from tqdm import trange
-        for i in trange(50455*7):
-            self.push_stone(i % 5)
-        a = self.true_height - 1
-        for i in trange(50455*7):
-            self.push_stone(i % 5)
-        b = self.true_height - 1
+        import math
+        lcm = math.lcm(self.n_push, self.n_rocks)
         
-        cychei = b - a
-        print(f'cychei: {cychei}')
+        height_o_stacks: list[int] = []
+        step_o_stacks: list[int] = []
+        stack_o_stacks: list[list[int]] = []
 
-        n_remains = 1000000000000 - 2 * 50455*7
-        n_cycs = n_remains // (50455*7)
+        ctr = 0
+        while True:
+            ctr += 1
+            for ii in trange(lcm):
+                self.push_stone(ii % 5)
+            stack_b = self.stack[-30:].copy()
+            b = self.true_height - 1
+            b_s = ctr * lcm
+            if stack_b in stack_o_stacks:
+                k = stack_o_stacks.index(stack_b)
+                stack_a = stack_o_stacks[k]
+                a = height_o_stacks[k]
+                a_s = step_o_stacks[k]
+                break
+            height_o_stacks.append(b)
+            step_o_stacks.append(b_s)
+            stack_o_stacks.append(stack_b)
 
-        n_extra = n_remains % (50455*7)
+        assert stack_a == stack_b
+        cyc_hei = b - a
+        cyc_len = b_s - a_s
+        
+        print(f'cyc_hei: {cyc_hei}')
+        print(f'cyc_len: {cyc_len}')
 
-        for i in trange(n_extra):
-            self.push_stone(i % 5)
+        n_remains = 1_000_000_000_000 - b_s
+        n_cycs = n_remains // cyc_len
 
-        return self.true_height - 1 + cychei * n_cycs
+        n_extra = n_remains % cyc_len
+
+        for ii in trange(n_extra):
+            self.push_stone(ii % 5)
+
+        return self.true_height - 1 + cyc_hei * n_cycs
 
 
         return 
@@ -153,8 +175,10 @@ class Day:
 if __name__ == "__main__":
     t = Day(SAMPLE)
     print(t.solve1())
+    
     t2 = Day(SAMPLE)
     print(t2.solve2())
+
     r = Day(REAL)
     print(r.solve1())
     r2 = Day(REAL)
