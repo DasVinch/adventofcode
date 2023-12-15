@@ -168,9 +168,6 @@ class Day:
         return self.true_height - 1 + cyc_hei * n_cycs
 
 
-        return 
-
-
 
 if __name__ == "__main__":
     t = Day(SAMPLE)
