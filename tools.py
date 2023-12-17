@@ -68,7 +68,7 @@ class AbstractDijkstraer(typ.Generic[T]):
         self.border: PriorityQueue[PrioritizedItem[T]] = PriorityQueue()
         self.border.put(PrioritizedItem(priority=0, item=start))
 
-        self.distanceDict = {start: 0}
+        self.distanceDict: dict[T, tuple[int, typ.Optional[T]]] = {start: (0, None)}
         self.used = False
 
         # There must be no zero-score transitions!!
@@ -93,8 +93,8 @@ class AbstractDijkstraer(typ.Generic[T]):
             for nei, cost in self.get_neighbors(elem):
                 score = prio + cost
                 is_new = nei not in self.distanceDict
-                if is_new or score < self.distanceDict[nei]:
-                    self.distanceDict[nei] = score
+                if is_new or score < self.distanceDict[nei][0]:
+                    self.distanceDict[nei] = (score, elem)
                     self.border.put(PrioritizedItem(priority=score, item=nei))
 
     def validate_target(self, elem: T) -> bool:
@@ -102,6 +102,17 @@ class AbstractDijkstraer(typ.Generic[T]):
 
     def get_neighbors(self, elem: T) -> typ.Set[typ.Tuple[T, int]]:
         raise NotImplementedError('Abstract.')
+    
+    def show_track(self, elem: T) -> list[T]:
+        
+        backtrack: list[T] = []
+        our_elem = elem
+
+        while our_elem is not None:
+            backtrack.append(our_elem)
+            our_elem = self.distanceDict[our_elem][1]
+
+        return backtrack[::-1]
 
 def compare(l, r):
     #print(l, r)

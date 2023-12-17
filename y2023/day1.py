@@ -67,7 +67,7 @@ class Day:
             total += digits[0] * 10 + digits[-1]
 
             #print(line, digits)
-
+            
         return total
 
 if __name__ == "__main__":
