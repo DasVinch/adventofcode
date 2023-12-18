@@ -31,6 +31,8 @@ class BeamDir(IntEnum):
     LEFT = 2
     RIGHT = 3
 
+
+
 from dataclasses import dataclass
 
 @dataclass
