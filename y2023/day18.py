@@ -34,16 +34,16 @@ SAMPLE = [
 
 import re
 
-RE = '(L|R|U|D) (\d+) \(#([0-9a-f]{6})\)'
+RE = '(L|R|U|D) (\d+) \(#([0-9a-f]{5})(\d)\)'
 
-Mytup: typ.TypeAlias = tuple[str, int, int]
+Mytup: typ.TypeAlias = tuple[str, int, str, int]
 
 def parses(l: list[str]) -> list[Mytup]:
     return [parse(ll) for ll in l]
 
 def parse(l: str) -> Mytup:
-    d,n,c = re.match(RE, l).groups()
-    return (d, int(n), int(c, 16))
+    d,n,c,i = re.match(RE, l).groups()
+    return (d, int(n), 'RDLU'[int(i)], int(c, 16))
 
 
 class Day:
@@ -60,7 +60,7 @@ class Day:
 
         alles_poses: list[tuple[int,int]] = [(0,0)]
 
-        for dir, n, _ in self.dat:
+        for dir, n, *_ in self.dat:
             nn = n
             while nn > 0:
                 nn -= 1
@@ -92,7 +92,37 @@ class Day:
         return len(alles_poses) - 1 + np.sum(l_map == 2) # start is dupped
 
     def solve2(self) -> int:
-        return 0
+        # Create a list of vertices
+
+        curr_x = 0
+        curr_y = 0
+
+        alles_poses: list[tuple[int,int]] = [(0,0)]
+
+        for *_, dir, n in self.dat:
+            match dir:
+                case 'U':
+                    curr_x -= n
+                case 'D':
+                    curr_x += n
+                case 'L':
+                    curr_y -= n
+                case 'R':
+                    curr_y += n
+            alles_poses.append((curr_x, curr_y))
+
+        area = 0
+        for kk in range(len(alles_poses) - 1):
+            x0, y0 = alles_poses[kk]
+            x1, y1 = alles_poses[kk+1]
+            area += x1*y0 - x0*y1
+
+        area //= 2
+
+        border_len = sum([k for (_,_,_,k) in self.dat])
+
+        return area + border_len//2 + 1
+
 
 
 if __name__ == "__main__":
