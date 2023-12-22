@@ -40,18 +40,27 @@ import re
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(frozen=True)
 class Point:
     x: int
     m: int
     a: int
     s: int
 
-    def __hash__(self) -> int:
-        return hash((self.x, self.m, self.a, self.s))
-    
-    def __eq__(self, oth: Point) -> bool:
-        return self.x == oth.x and self.m == oth.m and self.a == oth.a and self.s == oth.s
+
+@dataclass(frozen=True)
+class PointRange:
+    x: tuple[int, int]
+    m: tuple[int, int]
+    a: tuple[int, int]
+    s: tuple[int, int]
+
+    def volume(self):
+        return (self.x[1] - self.x[0] + 1) * \
+        (self.m[1] - self.m[0] + 1) * \
+        (self.a[1] - self.a[0] + 1) * \
+        (self.s[1] - self.s[0] + 1)
+
 
 
 @dataclass
@@ -69,6 +78,36 @@ class Clause:
             case _:
                 raise AssertionError('blah.')
 
+    def applyRange(
+            self,
+            pr: PointRange) -> tuple[PointRange | None, PointRange | None]:
+        vmin, vmax = getattr(pr, self.var)
+        if vmin < self.val and vmax < self.val and self.op == '<':
+            return (pr, None)
+        if vmin <= self.val and vmax <= self.val and self.op == '>':
+            return (None, pr)
+        if vmin > self.val and vmax > self.val and self.op == '>':
+            return (pr, None)
+        if vmin >= self.val and vmax >= self.val and self.op == '<':
+            return (None, pr)
+
+        args_identical = {'x': pr.x, 'm': pr.m, 'a': pr.a, 's': pr.s}
+        if self.op == '<':
+            args_identical[self.var] = (vmin, self.val - 1)
+            prlow = PointRange(**args_identical)
+            args_identical[self.var] = (self.val, vmax)
+            prhigh = PointRange(**args_identical)
+            return (prlow, prhigh)
+
+        elif self.op == '>':
+            args_identical[self.var] = (vmin, self.val)
+            prlow = PointRange(**args_identical)
+            args_identical[self.var] = (self.val + 1, vmax)
+            prhigh = PointRange(**args_identical)
+            return (prhigh, prlow)
+
+        raise AssertionError('Dafukato.')
+
 
 @dataclass
 class Workflow:
@@ -80,6 +119,27 @@ class Workflow:
             if cl.apply(point):
                 return dest
         return self.final
+
+    def applyRanges(self, spr: PointRange) -> dict[str, set[PointRange]]:
+        result: dict[str, set[PointRange]] = {tp[1]: set() for tp in self.ops}
+        result[self.final] = set()
+
+        to_do = {spr}
+        for cl, dest in self.ops:
+            to_remain = set()
+            for pr in to_do:
+                spass, sfail = cl.applyRange(pr)
+                if spass is not None:
+                    result[dest].add(spass)
+                if sfail is not None:
+                    to_remain.add(sfail)
+            
+            to_do = to_remain
+
+        for pr in to_do:
+            result[self.final].add(pr)
+
+        return result
 
 
 def parser(lines: list[str]) -> tuple[dict[str, Workflow], set[Point]]:
@@ -93,7 +153,7 @@ def parser(lines: list[str]) -> tuple[dict[str, Workflow], set[Point]]:
         name, data = parse_workflow(line)
         workflows[name] = data
 
-    for line in lines[kk+1:]:
+    for line in lines[kk + 1:]:
         points.add(parse_point(line))
 
     return workflows, points
@@ -111,13 +171,12 @@ def parse_workflow(l: str) -> tuple[str, Workflow]:
     clauses_str = core.split(',')
     re_clause = '([xmas])(<|>)(\d+):([a-zA-Z]*)'
 
-    clauses: list[tuple[Clause,str]] = []
+    clauses: list[tuple[Clause, str]] = []
     for cl in clauses_str[:-1]:
         letter, op, num_str, target = re.match(re_clause, cl).groups()
         clauses.append((Clause(letter, op, int(num_str)), target))
 
     return (name, Workflow(clauses, clauses_str[-1]))
-    
 
 
 class Day:
@@ -135,11 +194,30 @@ class Day:
             while mapped_points[p] not in ('A', 'R'):
                 mapped_points[p] = self.workflows[mapped_points[p]].apply(p)
 
-        return sum((p.x + p.m + p.a + p.s for p in mapped_points if mapped_points[p] == 'A'))
+        return sum((p.x + p.m + p.a + p.s for p in mapped_points
+                    if mapped_points[p] == 'A'))
 
     def solve2(self) -> int:
+        
+        pending_prs: set[tuple[PointRange, str]] = {(PointRange((1,4000), (1,4000), (1,4000), (1,4000)), 'in')}
+        accepted: set[PointRange] = set()
+        rejected: set[PointRange] = set()
 
-        return 0
+        while len(pending_prs) > 0:
+            pr, flow = pending_prs.pop()
+            workflowed_prs = self.workflows[flow].applyRanges(pr)
+            for flow, flowed_prs in workflowed_prs.items():
+                if flow == 'A':
+                    accepted.update(flowed_prs)
+                elif flow == 'R':
+                    rejected.update(flowed_prs)
+                else:
+                    for ppr in flowed_prs:
+                        pending_prs.add((ppr, flow))
+
+        tot = sum([pr.volume() for pr in accepted])
+
+        return tot
 
 
 if __name__ == "__main__":
