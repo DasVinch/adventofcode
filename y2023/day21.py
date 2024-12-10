@@ -80,15 +80,24 @@ class Day:
         if self.debug:
             self.mat_after = self.dat.copy()
             for (a,b), (dist,_) in self.p1djk.distanceDict.items():
-                if dist <= nmax and dist % 2 == nmax % 2:
+                if dist <= nmax and ((dist % 2) == (nmax % 2)):
                     self.mat_after[a,b] = 3 
 
 
         return len([dist for (n,(dist,_)) in self.p1djk.distanceDict.items() if (dist <= nmax and dist % 2 == 0)])
     
+    def solve2(self, nmax: int = 26_501_365):
+        self.solve1(nmax = 256)
+        full_tile_even = len([dist for (n,(dist,_)) in self.p1djk.distanceDict.items() if dist % 2 == 0])
+        full_tile_odd = len([dist for (n,(dist,_)) in self.p1djk.distanceDict.items() if dist % 2 == 1])
 
 
-    def solve2(self) -> int:
+
+        # 4 tiles to get in from the middle of a side (and watch parity)
+        # 4 * N tiles to get in from a corner (and watch parity)
+        # N**2 tiles completed (watch parity!)
+
+
         return 0
 
 

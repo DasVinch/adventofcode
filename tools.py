@@ -47,6 +47,13 @@ def print_bool_matrix(arr: npt.NDArray) -> None:
 
     print()
 
+def print_matrix(mat: npt.NDArray, fmt='%s'):
+    m,n = mat.shape
+    for i in range(m):
+        for j in range(n):
+            print(fmt % mat[i,j], end='')
+        print()
+
 
 
 from queue import PriorityQueue
