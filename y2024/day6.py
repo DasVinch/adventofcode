@@ -26,6 +26,13 @@ SAMPLE = tl.make_char_matrix([
 
 import numba
 
+import ctypes
+DLL = ctypes.CDLL('./y2024/libday6.so')
+DLL.c_bitmask_solve.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.POINTER(ctypes.c_char), ctypes.c_int, ctypes.c_int)
+DLL.c_bitmask_solve.restype = ctypes.c_int
+
+
+
 @numba.jit
 def numbad_mask_solve1(guard: tuple[int, int], mat, detect_cycle: bool = False) -> int:
         
@@ -48,7 +55,7 @@ def numbad_mask_solve1(guard: tuple[int, int], mat, detect_cycle: bool = False) 
                         matwork[ii,jj] &= 0x0f
                         matwork[ii,jj] |= 0b0001
                         if ii > 0:
-                            matwork[ii-1, jj] = 0x10 | 0b001 | (matwork[ii-1, jj] & 0x0f)
+                            matwork[ii-1, jj] = 0x10 | 0b0001 | (matwork[ii-1, jj] & 0x0f)
                         ii -= 1
                 case 0x2: # '>': # 0x2 0b0010
                     if jj < n-1 and mat[ii, jj+1] == '#':
@@ -157,12 +164,12 @@ class Day:
         m, n = self.mat.shape
 
         if self.debug:
-            c: int = matwork[ii, jj]
+            c: int = matwork[ii, jj] # type: ignore
             tl.print_matrix(t.mat_p1, '%-2s ')
             input(f'{ii=} {jj=} {c=}')
 
         while ii >= 0 and jj >= 0 and ii < m and jj < n:
-            c: int = matwork[ii, jj]
+            c: int = matwork[ii, jj] # type: ignore
             cl = (c & 0xf0) >> 4
             match cl:
                 case 0x1: # '^': # 0x1 0b0001
@@ -229,7 +236,7 @@ class Day:
 
         for ii, jj in self.trace:
             matbak = self.mat[ii, jj]
-            print(ii,jj)
+            #print(ii,jj)
             self.mat[ii, jj] = '#'
             if numbad_mask_solve1(self.guard, self.mat, detect_cycle=True) < 0:
                 cyclers += 1
@@ -238,7 +245,37 @@ class Day:
             self.mat[ii, jj] = matbak
 
         return cyclers
-            
+
+    def cmask_solve1(self) -> int:
+        uint8_mat = np.zeros_like(self.mat, dtype=np.uint8)
+        uint8_mat[self.mat == '#'] = 1
+        mat_ptr = uint8_mat.ctypes.data_as(ctypes.POINTER(ctypes.c_char))
+
+        m, n = self.mat.shape
+        return DLL.c_bitmask_solve(self.guard[0], self.guard[1], mat_ptr, m, n)
+
+    def solve2c(self) -> int:
+        self.mask_solve1()
+        
+        uint8_mat = np.zeros_like(self.mat, dtype=np.uint8)
+        uint8_mat[self.mat == '#'] = 1
+        mat_ptr = uint8_mat.ctypes.data_as(ctypes.POINTER(ctypes.c_char))
+        m, n = self.mat.shape
+
+        self.trace = list(zip(*np.where(self.mat_p1 > 0)))
+
+        cyclers = 0
+
+        for ii, jj in self.trace:
+            matbak = uint8_mat[ii, jj]
+            #print(ii,jj)
+            uint8_mat[ii, jj] = 1
+            if DLL.c_bitmask_solve(self.guard[0], self.guard[1], mat_ptr, m, n) < 0:
+                cyclers += 1
+            uint8_mat[ii, jj] = matbak
+
+        return cyclers
+
 
 
 
@@ -248,11 +285,15 @@ if __name__ == "__main__":
     t = Day(SAMPLE, False)
     print(f'Test p1: {t.solve1()}')
     print(f'Test p1_2: {t.mask_solve1()}')
+    print(f'Test p1_3: {t.cmask_solve1()}')
+
 
     r = Day(REAL)
     print(f'Real p1: {r.solve1()}')
     print(f'Real p1_2: {r.mask_solve1()}')
+    print(f'Real p1_3: {r.cmask_solve1()}')
 
+    
     print(f'Test p2: {t.solve2()}')
     #t.debug = True
     print(f'Test p2: {t.solve2()}')
@@ -260,5 +301,10 @@ if __name__ == "__main__":
 
     import time
     s = time.time()
-    print(f'Real p2: {r.solve2()}')
+    print(f'Real p2 (numba): {r.solve2()}')
+    print(time.time() - s)
+    
+    print(f'Test p2 (C): {t.solve2c()}')
+    s = time.time()
+    print(f'Real p2 (C): {r.solve2c()}')
     print(time.time() - s)

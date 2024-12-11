@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import tools as tl
+import time
 
 import typing as typ
 
@@ -38,4 +39,7 @@ if __name__ == "__main__":
     print(f'Real p1: {r.solve1()}')
 
     print(f'Test p2: {t.solve2()}')
+
+    s = time.time()
     print(f'Real p2: {r.solve2()}')
+    print(time.time() - s)

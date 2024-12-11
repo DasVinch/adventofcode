@@ -7,6 +7,8 @@ from tools import get_input
 import typing as typ
 import numpy as np
 
+import time
+
 import re
 
 DAYDAY = int(os.path.basename(__file__).split('.')[0][3:])
@@ -120,4 +122,6 @@ if __name__ == "__main__":
     print(f'Real p1: {r.solve1()}')
 
     print(f'Test p2: {t.solve2()}')
+    s = time.time()
     print(f'Real p2: {r.solve2()}')
+    print(time.time() - s)
