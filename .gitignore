@@ -5,3 +5,6 @@ Cargo.lock
 
 inputs
 *.so
+*.exe
+
+.vscode

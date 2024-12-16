@@ -75,7 +75,7 @@ class AbstractDijkstraer(typ.Generic[T]):
         self.border: PriorityQueue[PrioritizedItem[T]] = PriorityQueue()
         self.border.put(PrioritizedItem(priority=0, item=start))
 
-        self.distanceDict: dict[T, tuple[int, typ.Optional[T]]] = {start: (0, None)}
+        self.distanceDict: dict[T, tuple[int, T | None]] = {start: (0, None)}
         self.used = False
 
         # There must be no zero-score transitions!!
