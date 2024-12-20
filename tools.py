@@ -76,6 +76,7 @@ class AbstractDijkstraer(typ.Generic[T]):
         self.border.put(PrioritizedItem(priority=0, item=start))
 
         self.distanceDict: dict[T, tuple[int, T | None]] = {start: (0, None)}
+        self.multiDistanceDict: dict[T, tuple[int, list[T]]] = {start: (0, [])}
         self.used = False
 
         # There must be no zero-score transitions!!
@@ -97,6 +98,8 @@ class AbstractDijkstraer(typ.Generic[T]):
             if self.validate_target(elem):
                 return prio
 
+            self.intercept_elem(elem)
+
             for nei, cost in self.get_neighbors(elem):
                 score = prio + cost
                 is_new = nei not in self.distanceDict
@@ -106,6 +109,9 @@ class AbstractDijkstraer(typ.Generic[T]):
 
     def validate_target(self, elem: T) -> bool:
         return elem in self.targets
+
+    def intercept_elem(self, elem: T) -> None:
+        ...
 
     def get_neighbors(self, elem: T) -> typ.Set[typ.Tuple[T, int]]:
         raise NotImplementedError('Abstract.')
@@ -120,6 +126,34 @@ class AbstractDijkstraer(typ.Generic[T]):
             our_elem = self.distanceDict[our_elem][1]
 
         return backtrack[::-1]
+
+    def solveMultiEqualPath(self) -> int | None:
+        if self.used:
+            raise ValueError('AbstractDijkstraer has been used. Make a new one')
+        self.used = True
+
+        while not self.border.empty():
+            wrappedelem = self.border.get()
+            prio = wrappedelem.priority
+            elem = wrappedelem.item
+
+            #print(elem)
+
+            if self.validate_target(elem):
+                return prio
+
+            self.intercept_elem(elem)
+
+            for nei, cost in self.get_neighbors(elem):
+                score = prio + cost
+                is_new = nei not in self.multiDistanceDict
+                if is_new or score < self.multiDistanceDict[nei][0]:
+                    self.multiDistanceDict[nei] = (score, [elem])
+                    self.border.put(PrioritizedItem(priority=score, item=nei))
+                # Add-on!
+                elif score == self.multiDistanceDict[nei][0]:
+                    score, elem0 = self.multiDistanceDict[nei]
+                    self.multiDistanceDict[nei] = (score, elem0 + [elem])
 
 def compare(l, r):
     #print(l, r)
