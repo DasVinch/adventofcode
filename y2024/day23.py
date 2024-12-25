@@ -90,7 +90,6 @@ class Day:
 
     def solve2(self) -> int:
         n = len(self.nodeset)
-        self.adj_matrix = np.zeros((n,n))
 
         greedy_subgraphs: list[set[str]] = []
 
@@ -116,6 +115,12 @@ class Day:
         largest_clique.sort()
 
         return ','.join(largest_clique)
+
+    def solve2_bk(self):
+        # Bron-Kerbosch, no idea how it works.
+        # From Wikipedia
+        # ...
+
 
     def all_connected(self, node: str, subgraph: set[str]) -> bool:
         if len(subgraph) == 0:
