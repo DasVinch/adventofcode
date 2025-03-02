@@ -5,6 +5,7 @@ from typing import Set
 from tools import get_input
 import tools
 import math
+import time
 
 DAYDAY = int(os.path.basename(__file__).split('.')[0][3:])
 
@@ -77,11 +78,17 @@ class Djk(AbstractDijkstraer[tuple[int, int, int]]):
                 self.bz_bycol[y] = set()
             self.bz_bycol[y].add(bz)
 
-        self.max_x_yet = 0
+        self.reverse = reverse
+        print()
+        if self.reverse:
+            print('New min y: ', end='')
+        else:
+            print('New max y: ', end='')
+
+        self.max_y_yet = self.shape[1] if self.reverse else 0
 
         self.time_loop = math.lcm(shape[0] - 2, shape[1] - 2)
 
-        self.reverse = reverse
 
         super().__init__(start, targets)
 
@@ -89,9 +96,12 @@ class Djk(AbstractDijkstraer[tuple[int, int, int]]):
                                 -> Set[tuple[tuple[int, int, int], int]]:
 
         x, y, t = elem
-        if y > self.max_x_yet:
-            print(f'New max y {y}')
-            self.max_x_yet = y
+        if not self.reverse and y > self.max_y_yet:
+            print(f'{y} ', end='', flush = True)
+            self.max_y_yet = y
+        if self.reverse and y < self.max_y_yet:
+            print(f'{y} ', end='', flush = True)
+            self.max_y_yet = y
 
         neighbs: set[tuple[int,int,int]] = set()
 
@@ -125,11 +135,11 @@ class Djk(AbstractDijkstraer[tuple[int, int, int]]):
                 neighbs.add((1,1,(t+1) % self.time_loop))
             return {(n,1) for n in neighbs}
         
-        if (x,y) == (self.shape[0]-1,self.shape[0]-2):
+        if (x,y) == (self.shape[0]-1,self.shape[1]-2):
             # Treat start but when start is the end
-            neighbs.add((self.shape[0]-1,self.shape[0]-2,(t+1) % self.time_loop))
-            if not (1,1) in good_future_bzs:
-                neighbs.add((self.shape[0]-2,self.shape[0]-2,(t+1) % self.time_loop))
+            neighbs.add((self.shape[0]-1,self.shape[1]-2,(t+1) % self.time_loop))
+            if not (self.shape[0]-2,self.shape[1]-2) in good_future_bzs:
+                neighbs.add((self.shape[0]-2,self.shape[1]-2,(t+1) % self.time_loop))
             return {(n,1) for n in neighbs}
 
         # Can wait?
@@ -173,6 +183,10 @@ def parse_blizzards(lines: list[str]) -> list[Blizzard]:
     
     return bzs
 
+def advance_blizzards(bzs: list[Blizzard], steps: int, shape: tuple[int, int]) -> list[Blizzard]:
+    new_list = [Blizzard(b.compute_pos(steps, shape), b.dir) for b in bzs]
+    return new_list
+
 class Day:
 
     def __init__(self, lines: list[str], debug: bool = False) -> None:
@@ -198,18 +212,18 @@ class Day:
                     if t[0] == self.shape[0] - 1 and t[1] == self.shape[1] - 2}.pop()
         print(f'Solution_a: {solution_a}')
         
-        
         djk = Djk(self.bzs, self.shape, (self.shape[0] - 1, self.shape[1] - 2, solution_a), None, reverse=True)
         djk.solveWithoutPath()
         solution_b = {djk.distanceDict[t][0] for t in djk.distanceDict
                     if t[0] == 0 and t[1] == 1}.pop() + solution_a
         print(f'Solution_b: {solution_b}')
-        
+
         djk = Djk(self.bzs, self.shape, (0, 1, solution_b), None)
         djk.solveWithoutPath()
         solution_c = {djk.distanceDict[t][0] for t in djk.distanceDict
                     if t[0] == self.shape[0] - 1 and t[1] == self.shape[1] - 2}.pop() + solution_b
         print(f'Solution_c: {solution_c}')
+
 
         return solution_c
 
@@ -219,6 +233,11 @@ if __name__ == "__main__":
     print(f'Test p1: {t.solve1()}')
     print(f'Test p2: {t.solve2()}')
 
+    #1/0
     r = Day(REAL)
+    s = time.time()
     print(f'Real p1: {r.solve1()}')
+    print(time.time() - s)
+    s = time.time()
     print(f'Real p2: {r.solve2()}')
+    print(time.time() - s)

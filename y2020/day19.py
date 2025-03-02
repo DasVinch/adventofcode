@@ -93,12 +93,30 @@ class Day:
         return count
 
     def solve2(self):
-        pass
+        k8 = self.rules.index('8: 42')
+        k11 = self.rules.index('11: 42 31')
+        for expand in range(2, 10):
+            self.rules[k8] = (self.rules[k8] + ' | ' + '42 ' * expand).strip()
+            self.rules[k11] = (self.rules[k11] + ' | ' + '42 ' * expand + '31 ' * expand).strip()
+            for r in self.rules:
+                spl = r.split(': ')
+                n = int(spl[0])
+                rl = spl[1]
+                self.rule_dict[n] = rl
+
+
+            #import pdb; pdb.set_trace()
+            self.prepare_regexes()
+
+            print(self.solve1())
+
+
+        
 
 if __name__ == "__main__":
     t = Day(SAMPLE)
     print(t.solve1())
-    print(t.solve2())
+    #print(t.solve2())
     r = Day(REAL)
     print(r.solve1())
     print(r.solve2())
