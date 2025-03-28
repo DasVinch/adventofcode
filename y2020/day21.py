@@ -74,13 +74,15 @@ if __name__ == '__main__':
     print(time.time() - s)
     '''
 
-'fish'     : {'zgk'},
-'shellfish': {'xtzh'},
 'eggs'     : {'dtb'},
-'sesame'   : {'xkclg'},
+'fish'     : {'zgk'},
+'nuts'     : {'pxr'}
 'peanuts'  : {'cqnl'},
+'sesame'   : {'xkclg'},
+'shellfish': {'xtzh'},
 'soy'      : {'jpnv'},
 'wheat'    : {'lsvlx'},
-'nuts'     : {'pxr'}
+
+dtb,zgk,pxr,cqnl,xkclg,xtzh,jpnv,lsvlx
 
     '''
