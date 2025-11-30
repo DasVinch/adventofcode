@@ -1,29 +1,47 @@
-import os
-from tools import get_input
+from __future__ import annotations
 
-DAYDAY = int(os.path.basename(__file__).split('.')[0][3:])
+import typing as typ
 
-# if hacking with another file-based example
-# DAYDAY *= 10
+T = typ.TypeVar('T', covariant=True)
+class Day(typ.Protocol, typ.Generic[T]):
+    def __init__(self, parse_input: T, debug: bool = False) -> None:
+        ...
 
-SAMPLE = [
-]
+    @staticmethod
+    def parse_input(input: list[str]) -> T:
+        ...
 
-REAL = get_input(DAYDAY, 2022)
+    def solve1(self) -> int:
+        ...
 
+    def solve2(self) -> int:
+        ...
+
+'''
+from __future__ import annotations
+
+import typing as typ
+import tools as tl
+
+SAMPLE: list[str] | None = []
+
+ADDITIONAL_SAMPLES: list[list[str]] = []
+
+T_DATA: typ.TypeAlias = None # TODO
 
 class Day:
-    def __init__(self, lines) -> None:
-        pass
+    @staticmethod
+    def parse_input(input: list[str]) -> T_DATA:
+        ...
+    
+    def __init__(self, data: T_DATA, debug: bool = False) -> None:
+        self.data = data
+        self.debug = debug
+        ...
 
-    def solve1(self):
-        pass
+    def solve1(self) -> int:
+        ...
 
-    def solve2(self):
-        pass
-
-if __name__ == "__main__":
-    t = Day(SAMPLE)
-    print(t.solve2())
-    r = Day(REAL)
-    print(r.solve2())
+    def solve2(self) -> int:
+        ...
+'''

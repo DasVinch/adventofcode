@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import typing as typ
 
-from typing import List, Dict
 import numpy as np
 import numpy.typing as npt
 
 
-def get_input(n: int, year: int = 2022) -> List[str]:
+def get_input(n: int, year: int = 2022) -> list[str]:
     fname = f"inputs/{year}/input{n}.txt"
 
     with open(fname, 'r') as f:
@@ -17,7 +16,7 @@ def get_input(n: int, year: int = 2022) -> List[str]:
     return l
 
 
-def make_int_matrix(lines: List[str],
+def make_int_matrix(lines: list[str],
                     splitchar: str | None = None) -> npt.NDArray:
     if splitchar is None:
         return np.asarray([[int(c) for c in line] for line in lines])
@@ -26,16 +25,16 @@ def make_int_matrix(lines: List[str],
                            for line in lines])
 
 
-def make_cmapped_int_matrix(lines: List[str], cmap: Dict[str,
+def make_cmapped_int_matrix(lines: list[str], cmap: dict[str,
                                                          int]) -> npt.NDArray:
     return np.asarray([[cmap[c] for c in line] for line in lines])
 
 
-def make_char_matrix(lines: List[str]) -> npt.NDArray:
+def make_char_matrix(lines: list[str]) -> npt.NDArray:
     return np.asarray([[c for c in line] for line in lines])
 
 
-def make_charint_matrix(lines: List[str]) -> npt.NDArray:
+def make_charint_matrix(lines: list[str]) -> npt.NDArray:
     return np.asarray([[ord(c) for c in line] for line in lines])
 
 
@@ -82,7 +81,7 @@ class AbstractDijkstraer(typ.Generic[T]):
 
     def __init__(self,
                  start: T,
-                 targets: typ.Set[T],
+                 targets: set[T],
                  max_depth: int = -1) -> None:
 
         self.targets = targets
@@ -132,7 +131,7 @@ class AbstractDijkstraer(typ.Generic[T]):
     def intercept_elem(self, elem: T) -> None:
         ...
 
-    def get_neighbors(self, elem: T) -> typ.Set[typ.Tuple[T, int]]:
+    def get_neighbors(self, elem: T) -> set[tuple[T, int]]:
         raise NotImplementedError('Abstract.')
 
     def show_track(self, elem: T) -> list[T]:
